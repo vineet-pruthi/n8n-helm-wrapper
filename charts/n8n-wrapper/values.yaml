@@ -1,0 +1,30 @@
+ingress:
+  enabled: &ingressenabled true
+  className: &ingressclassName cce
+elb:
+  port: &elbport '80'
+  class: &elbclass union
+  id: &elbid
+
+service:
+  type: &servicetype NodePort
+
+
+n8n:
+  service:
+    type: *servicetype
+   
+  extraEnv:
+    N8N_SECURE_COOKIE: false
+   
+  ingress:
+    enabled: *ingressenabled
+    className: *ingressclassName
+    annotations:
+      kubernetes.io/elb.port: *elbport
+      kubernetes.io/elb.id: *elbid
+      kubernetes.io/elb.class: *elbclass
+    hosts:
+      - host: ''
+        paths:
+          - '/'
